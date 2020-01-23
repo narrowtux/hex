@@ -252,15 +252,27 @@ defmodule Mix.Tasks.Hex.Publish do
 
   defp print_public_private(organization) do
     if public_organization?(organization) do
-      Hex.Shell.info(["Publishing package to ", emphasis("public"), " repository hexpm."])
-    else
-      Hex.Shell.info([
-        [
+      Hex.Shell.info(
+        Hex.Shell.format([
           "Publishing package to ",
-          emphasis("private"),
-          " repository #{organization}."
-        ]
-      ])
+          :bright,
+          "public",
+          :reset,
+          " repository hexpm."
+        ])
+      )
+    else
+      Hex.Shell.info(
+        Hex.Shell.format([
+          [
+            "Publishing package to ",
+            :bright,
+            "private",
+            :reset,
+            " repository #{organization}."
+          ]
+        ])
+      )
     end
   end
 
@@ -368,14 +380,6 @@ defmodule Mix.Tasks.Hex.Publish do
           Hex.Shell.error("Failed to transfer ownership")
           Hex.Utils.print_error_result(other)
       end
-    end
-  end
-
-  defp emphasis(text) do
-    if IO.ANSI.enabled?() do
-      Hex.Shell.format([:bright, text, :reset])
-    else
-      ["**", text, "**"]
     end
   end
 
